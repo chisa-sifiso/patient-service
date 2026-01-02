@@ -11,27 +11,19 @@ import java.util.UUID;
 @Entity
 @Data
 public class Patient {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     @NotNull
     private String name;
-
     @NotNull
     @Email
     @Column(unique = true)
     private String email;
-
     @NotNull
     private String address;
-
     @NotNull
-    private LocalDate dataOFBirth;
-
+    private LocalDate dateOfBirth;
     @NotNull
     private LocalDate registerDate;
 

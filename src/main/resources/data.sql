@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS patients;
+DROP TABLE IF EXISTS patient;
 
 CREATE TABLE patient (
                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
