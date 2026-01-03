@@ -1,9 +1,10 @@
 package za.ac.tut.patient_service.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import za.ac.tut.patient_service.Dto.PatientRequestDTO;
 import za.ac.tut.patient_service.Dto.PatientsResponseDTO;
 import za.ac.tut.patient_service.Service.PatientService;
 
@@ -24,6 +25,11 @@ public class PatientController {
         List<PatientsResponseDTO> patients= patientService.getPatients();
 
         return ResponseEntity.ok().body(patients);
+    }
+    @PostMapping
+    public ResponseEntity<PatientsResponseDTO> creatPatient(@RequestBody PatientRequestDTO patientRequestDTO){
+        PatientsResponseDTO patientsResponseDTO=  patientService.createPatient(patientRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(patientsResponseDTO);
     }
 
 
