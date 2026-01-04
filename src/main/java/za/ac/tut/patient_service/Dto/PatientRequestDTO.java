@@ -9,17 +9,17 @@ import lombok.Data;
 @Data
 public class PatientRequestDTO {
     @NotBlank()
-    @Size(max = 100,message = "Name canot exceed 100 charatrs")
+    @Size(max = 100,message = "Name cannot exceed 100 characters")
     private String name;
 
     @NotBlank
-    @Email(message = "Email should be vaild")
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotBlank(message = "Address is requied")
+    @NotBlank(message = "Address is required")
     private String adrress;
 
-    @NotBlank(message = "Date of birth is requied")
+    @NotBlank(message = "Date of birth is required")
     private String dateOfBirth;
 
     @NotNull(message = "Registered date is required")
