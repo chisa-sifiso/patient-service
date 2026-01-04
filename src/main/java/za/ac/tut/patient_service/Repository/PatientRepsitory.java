@@ -6,4 +6,6 @@ import za.ac.tut.patient_service.Entity.Patient;
 @Repository
 
 public interface PatientRepsitory extends JpaRepository<Patient,Long> {
+  public boolean existsPatientByEmail(String userEmail);
+
 }

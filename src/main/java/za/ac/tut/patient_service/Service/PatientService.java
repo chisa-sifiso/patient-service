@@ -5,6 +5,7 @@ import za.ac.tut.patient_service.Dto.PatientRequestDTO;
 import za.ac.tut.patient_service.Dto.PatientsResponseDTO;
 import za.ac.tut.patient_service.Entity.Patient;
 import za.ac.tut.patient_service.Repository.PatientRepsitory;
+import za.ac.tut.patient_service.exception.EmailAlreadyExistException;
 import za.ac.tut.patient_service.mapper.PatientMapper;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class PatientService {
 
 
     public PatientsResponseDTO createPatient(PatientRequestDTO patientRequestDTO){
+        if(patientRepsitory.existsPatientByEmail(patientRequestDTO.getEmail())){
+            throw new EmailAlreadyExistException("A patient of this email exits already "+patientRequestDTO.getEmail());
+        }
         Patient patient= PatientMapper.toModel(patientRequestDTO);
 
 
