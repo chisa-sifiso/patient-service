@@ -22,10 +22,10 @@ public class PatientMapper {
     public  static Patient toModel(PatientRequestDTO patientRequestDTO){
         Patient patient = new Patient();
         patient.setName(patientRequestDTO.getName());
-        patient.setAddress(patientRequestDTO.getAdrress());
+        patient.setAddress(patientRequestDTO.getAddress());
         patient.setEmail(patientRequestDTO.getEmail());
         patient.setDateOfBirth(LocalDate.parse(patientRequestDTO.getDateOfBirth()));
-        patient.setRegisterDate(LocalDate.parse(patientRequestDTO.getRegistedDate()));
+        patient.setRegisterDate(LocalDate.parse(patientRequestDTO.getRegisterDate()));
         return patient;
 
     }

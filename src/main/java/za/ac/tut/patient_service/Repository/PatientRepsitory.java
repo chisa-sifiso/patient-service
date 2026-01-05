@@ -7,5 +7,6 @@ import za.ac.tut.patient_service.Entity.Patient;
 
 public interface PatientRepsitory extends JpaRepository<Patient,Long> {
   public boolean existsPatientByEmail(String userEmail);
-
+  boolean existsByEmailAndIdNot(String email,Long id);
+  void deleteById(Long id);
 }

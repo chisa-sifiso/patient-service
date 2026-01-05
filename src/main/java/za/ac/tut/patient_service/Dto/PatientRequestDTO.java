@@ -2,9 +2,9 @@ package za.ac.tut.patient_service.Dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import za.ac.tut.patient_service.Dto.validators.CreatePatientValidationGroup;
 
 @Data
 public class PatientRequestDTO {
@@ -17,13 +17,13 @@ public class PatientRequestDTO {
     private String email;
 
     @NotBlank(message = "Address is required")
-    private String adrress;
+    private String address;
 
     @NotBlank(message = "Date of birth is required")
     private String dateOfBirth;
 
-    @NotNull(message = "Registered date is required")
-    private String registedDate;
+    @NotBlank(groups = CreatePatientValidationGroup.class, message = "Registered date is required")
+    private String registerDate;
 
 
 }

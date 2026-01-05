@@ -10,7 +10,12 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Map<String,String>> handleNullPointerException(NullPointerException ex){
+        Map<String,String> errors = new HashMap<>();
+        errors.put("message",ex.getMessage());
+        return ResponseEntity.badRequest().body(errors);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> handleValidationException(MethodArgumentNotValidException ex){
         Map<String,String> errors = new HashMap<>();
@@ -25,5 +30,11 @@ public class GlobalExceptionHandler {
         errors.put("message",ex.getMessage());
         return ResponseEntity.badRequest().body(errors);
 
+    }
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<Map<String,String>> hanlePatientNotFoundException(PatientNotFoundException ex){
+      Map<String,String>  error = new HashMap<>();
+      error.put("message",ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
     }
 }
