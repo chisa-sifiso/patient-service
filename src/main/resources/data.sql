@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS patient;
 
 CREATE TABLE patient (
-                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                          name VARCHAR(255) NOT NULL,
-                          email VARCHAR(255) NOT NULL UNIQUE,
-                          address VARCHAR(255) NOT NULL,
-                          date_of_birth DATE NOT NULL,
-                          register_date DATE NOT NULL
+                         id BIGSERIAL PRIMARY KEY,
+                         name VARCHAR(255) NOT NULL,
+                         email VARCHAR(255) NOT NULL UNIQUE,
+                         address VARCHAR(255) NOT NULL,
+                         date_of_birth DATE NOT NULL,
+                         register_date DATE NOT NULL
 );
 
 INSERT INTO patient (name, email, address, date_of_birth, register_date)
