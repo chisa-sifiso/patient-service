@@ -1,14 +1,30 @@
-# 1️⃣ Base image (Java 17)
-FROM eclipse-temurin:17-jdk-alpine
+# =========================
+# 1️⃣ Build stage (Maven)
+# =========================
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 
-# 2️⃣ Set working directory inside container
 WORKDIR /app
 
-# 3️⃣ Copy the built jar into container
-COPY target/patient-service-0.0.1-SNAPSHOT.jar app.jar
+# Copy only what's needed to build
+COPY pom.xml .
+COPY src ./src
 
-# 4️⃣ Expose Spring Boot port
+# Build the Spring Boot jar
+RUN mvn clean package -DskipTests
+
+
+# =========================
+# 2️⃣ Runtime stage (Java only)
+# =========================
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy jar from build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose Spring Boot port
 EXPOSE 8080
 
-# 5️⃣ Run the app
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
