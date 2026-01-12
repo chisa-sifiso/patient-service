@@ -1,8 +1,0 @@
-GRPC localhost:9090/BillingService/CreateBillingaccount
-Content-Type: application/json
-
-{
-  "patient": "155446",
-  "name": "Sifiso Vinjwa",
-  "email": "test@gmal.com"
-}
