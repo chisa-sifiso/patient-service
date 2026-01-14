@@ -7,6 +7,7 @@ import za.ac.tut.patient_service.Entity.Patient;
 import za.ac.tut.patient_service.Repository.PatientRepsitory;
 import za.ac.tut.patient_service.exception.EmailAlreadyExistException;
 import za.ac.tut.patient_service.exception.PatientNotFoundException;
+import za.ac.tut.patient_service.grpc.BillingServiceGrpcClient;
 import za.ac.tut.patient_service.mapper.PatientMapper;
 
 import java.time.LocalDate;
@@ -15,9 +16,11 @@ import java.util.List;
 @Service
 public class PatientService {
     private PatientRepsitory patientRepsitory;
+    private  BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService (PatientRepsitory patientRepsitory){
+    public PatientService (PatientRepsitory patientRepsitory,BillingServiceGrpcClient billingServiceGrpcClient){
         this.patientRepsitory=patientRepsitory;
+        this.billingServiceGrpcClient=billingServiceGrpcClient;
 
     }
 
@@ -37,7 +40,10 @@ public class PatientService {
 
 
         Patient newPatient = patientRepsitory.save(patient);
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString() ,
+                newPatient.getName() , newPatient.getEmail());
         return PatientMapper.toPatientResponseDTO(newPatient);
+
 
     }
     public PatientsResponseDTO updatePatient(Long id,PatientRequestDTO patientRequestDTO){

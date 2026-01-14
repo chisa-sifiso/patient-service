@@ -2,7 +2,7 @@ GRPC localhost:9090/BillingService/CreateBillingaccount
 Content-Type: application/json
 
 {
-  "patient": "155446",
-  "name": "Sifiso Vinjkkwa",
-  "email": "test@gmal.com"
+  "patient": "15547746",
+  "name": "Sifiso Vjjjinjkkwa",
+  "email": "test@gmhhal.com"
 }

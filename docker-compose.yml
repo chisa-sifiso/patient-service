@@ -11,17 +11,27 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  billing-service:
+    build: ./billling-service
+    container_name: billling-service
+    ports:
+      - "4001:4001"
+      - "9090:9090"
+
   patient-service:
-    build: .
-    container_name: patient-service-app
+    build: ./patient-services
+    container_name: patient-service
     ports:
       - "8080:8080"
     depends_on:
       - postgres
+      - billing-service
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/patientdb
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
+      BILLING_SERVICE_ADDRESS: billing-service
+      BILLING_SERVICE_GRPC_PORT: 9090
 
 volumes:
   postgres_data:
