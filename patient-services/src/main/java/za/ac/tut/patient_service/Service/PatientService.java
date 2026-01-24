@@ -8,6 +8,7 @@ import za.ac.tut.patient_service.Repository.PatientRepsitory;
 import za.ac.tut.patient_service.exception.EmailAlreadyExistException;
 import za.ac.tut.patient_service.exception.PatientNotFoundException;
 import za.ac.tut.patient_service.grpc.BillingServiceGrpcClient;
+import za.ac.tut.patient_service.kafka.kafkaProducer;
 import za.ac.tut.patient_service.mapper.PatientMapper;
 
 import java.time.LocalDate;
@@ -17,11 +18,12 @@ import java.util.List;
 public class PatientService {
     private PatientRepsitory patientRepsitory;
     private  BillingServiceGrpcClient billingServiceGrpcClient;
+    private final kafkaProducer kafkaProducer;
 
-    public PatientService (PatientRepsitory patientRepsitory,BillingServiceGrpcClient billingServiceGrpcClient){
+    public PatientService (PatientRepsitory patientRepsitory,BillingServiceGrpcClient billingServiceGrpcClient, kafkaProducer kafkaProducer){
         this.patientRepsitory=patientRepsitory;
         this.billingServiceGrpcClient=billingServiceGrpcClient;
-
+        this.kafkaProducer=kafkaProducer;
     }
 
     public List<PatientsResponseDTO> getPatients(){
@@ -42,6 +44,8 @@ public class PatientService {
         Patient newPatient = patientRepsitory.save(patient);
         billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString() ,
                 newPatient.getName() , newPatient.getEmail());
+         kafkaProducer.sendEvent(newPatient);
+
         return PatientMapper.toPatientResponseDTO(newPatient);
 
 
