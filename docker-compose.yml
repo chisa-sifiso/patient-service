@@ -6,11 +6,10 @@ services:
     container_name: kafka
     hostname: kafka
     ports:
-      - "9092:9092"   # Host access (IntelliJ)
-      - "9093:9093"   # Internal broker access
+      - "9092:9092"   # Host (IntelliJ)
+      - "9093:9093"   # Docker internal
       - "9094:9094"   # Controller
     environment:
-      # ===== KRaft mode =====
       KAFKA_KRAFT_MODE: "true"
       CLUSTER_ID: "1L6g7nGhU-eAKfL--X25wo"
 
@@ -18,13 +17,11 @@ services:
       KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9094"
 
-      # ===== Listeners =====
       KAFKA_LISTENERS: >
         PLAINTEXT://0.0.0.0:9092,
         INTERNAL://0.0.0.0:9093,
         CONTROLLER://0.0.0.0:9094
 
-      # ===== Advertised listeners (CRITICAL FIX) =====
       KAFKA_ADVERTISED_LISTENERS: >
         PLAINTEXT://localhost:9092,
         INTERNAL://kafka:9093
@@ -37,7 +34,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
 
-      # ===== Single-node safe defaults =====
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -46,6 +42,12 @@ services:
 
     volumes:
       - kafka_kraft:/var/lib/kafka/data
+
+    healthcheck:
+      test: ["CMD", "bash", "-c", "kafka-topics --bootstrap-server kafka:9093 --list"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   postgres:
     image: postgres:16
@@ -66,7 +68,8 @@ services:
       - "4001:4001"
       - "9090:9090"
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
   patient-service:
     build: ./patient-services
@@ -74,15 +77,27 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
-      - billing-service
-      - kafka
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/patientdb
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
       BILLING_SERVICE_ADDRESS: billing-service
       BILLING_SERVICE_GRPC_PORT: 9090
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9093
+
+  analytics-service:
+    build: ./analytics-service
+    container_name: analytics-service
+    ports:
+      - "4002:4002"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9093
 
 volumes:

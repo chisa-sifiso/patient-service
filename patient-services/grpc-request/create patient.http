@@ -1,0 +1,10 @@
+POST http://localhost:8080/patients
+Content-Type: application/json
+
+{
+  "name": "Sifiso",
+  "email": "testeyedhhfd@gmail.com",
+  "dateOfBirth": "1992-06-14",
+  "address": "45 peplos avvenue",
+  "registerDate": "2026-06-03"
+}
