@@ -100,6 +100,13 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9093
 
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "4003:4003"
+
+
 volumes:
   kafka_kraft:
   postgres_data:

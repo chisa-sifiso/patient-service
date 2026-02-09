@@ -9,12 +9,18 @@
         <module name="analytics-service" />
         <module name="billling-service" />
         <module name="patient-service" />
+        <module name="api-gatewayfake" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-gateway" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="analytics-service" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="api-gatewayfake" options="-parameters" />
       <module name="billling-service" options="-parameters" />
       <module name="patient-service" options="-parameters" />
     </option>
