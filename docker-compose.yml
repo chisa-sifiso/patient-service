@@ -106,7 +106,34 @@ services:
     ports:
       - "4003:4003"
 
+  auth-postgres:
+    image: postgres:16
+    container_name: auth-service-postgres
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - auth_postgres_data:/var/lib/postgresql/data
+
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "4004:4004"
+    depends_on:
+      auth-postgres:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-postgres:5432/authdb
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+
 
 volumes:
   kafka_kraft:
   postgres_data:
+  auth_postgres_data:
