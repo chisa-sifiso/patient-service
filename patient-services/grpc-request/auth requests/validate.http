@@ -1,6 +1,6 @@
 ### GET request to example server
 GET http://localhost:4004/validate
-Authorization: Bearer eseec33433434342333
+Authorization: Bearer {{token}}
 
 
 ###
